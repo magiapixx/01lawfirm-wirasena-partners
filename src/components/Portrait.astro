@@ -1,0 +1,47 @@
+---
+// Potret ilustrasi placeholder (pengganti foto sampai foto asli tersedia).
+interface Props {
+  name: string;
+  initials: string;
+  hue: number;
+  class?: string;
+}
+
+const { name, initials, hue, class: cls } = Astro.props;
+const uid = `p${Math.random().toString(36).slice(2, 9)}`;
+const tint = `hsl(${hue} 22% 82%)`;
+---
+
+<svg
+  class:list={['portrait', cls]}
+  viewBox="0 0 400 500"
+  preserveAspectRatio="xMidYMid slice"
+  role="img"
+  aria-label={`Ilustrasi potret ${name}`}
+>
+  <defs>
+    <linearGradient id={`${uid}g`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color={`hsl(${hue} 30% 34%)`} />
+      <stop offset="1" stop-color={`hsl(${hue + 30} 26% 9%)`} />
+    </linearGradient>
+    <radialGradient id={`${uid}r`} cx="0.5" cy="0.36" r="0.55">
+      <stop offset="0" stop-color={`hsl(${hue} 40% 78%)`} stop-opacity="0.42" />
+      <stop offset="1" stop-color={`hsl(${hue} 40% 78%)`} stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="400" height="500" fill={`url(#${uid}g)`} />
+  <rect width="400" height="500" fill={`url(#${uid}r)`} />
+  <g fill="none" stroke={tint} stroke-opacity="0.14">
+    {[60, 100, 140, 180, 220, 260].map((r) => <circle cx="200" cy="190" r={r} />)}
+  </g>
+  <circle cx="200" cy="186" r="64" fill={tint} fill-opacity="0.22" />
+  <path d="M68 500c6-120 62-180 132-180s126 60 132 180Z" fill={tint} fill-opacity="0.16" />
+  <text
+    x="28"
+    y="470"
+    fill={`hsl(${hue} 40% 88%)`}
+    font-family="Instrument Serif, serif"
+    font-style="italic"
+    font-size="96">{initials}</text
+  >
+</svg>

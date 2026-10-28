@@ -1,0 +1,150 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Portrait from '../components/Portrait.astro';
+import NextLink from '../components/NextLink.astro';
+import Arrow from '../components/Arrow.astro';
+import { lawyers, isPartner } from '../data/lawyers';
+import { practices } from '../data/practices';
+import { firm } from '../data/firm';
+
+const leaders = lawyers.filter((l) => l.quote);
+const partners = lawyers.filter(isPartner);
+const languages = new Set(lawyers.flatMap((l) => l.languages));
+const fan = lawyers.slice(2, 5);
+---
+
+<Base title="Tim" description="Advokat dan konsultan hukum Wirasena & Partners di Jakarta, Surabaya, dan Denpasar.">
+  <PageHero
+    label="(Tim kami)"
+    lead="Partner yang turun tangan langsung, associate yang tumbuh di setiap perkara. Kenali orang-orang yang akan mendampingi Anda."
+    meta={[
+      { value: String(lawyers.length), label: 'Advokat' },
+      { value: String(partners.length), label: 'Partner' },
+      { value: String(languages.size), label: 'Bahasa' },
+    ]}
+  >
+    <Fragment slot="title">Orang di balik <em>setiap strategi.</em></Fragment>
+    <div slot="art" class="fan" data-fan aria-hidden="true">
+      {
+        fan.map((l) => (
+          <div class="fan__slot">
+            <div class="fan__card">
+              <Portrait name={l.name} initials={l.initials} hue={l.hue} />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </PageHero>
+
+  <section class="s-light leaders">
+    <div class="wrap head-grid">
+      <p class="label">Pimpinan</p>
+      <h2 class="h2 display" data-split>Dipimpin oleh <em>pengalaman.</em></h2>
+    </div>
+    <div>
+      {
+        leaders.map((l) => (
+          <article class="wrap leader">
+            <a href={`/tim/${l.slug}`} class="leader__img" data-clip data-cursor="Profil">
+              <Portrait name={l.name} initials={l.initials} hue={l.hue} />
+            </a>
+            <div class="leader__body">
+              <p class="label">{l.role}</p>
+              <blockquote class="leader__quote display" data-words>
+                {l.quote}
+              </blockquote>
+              <p class="leader__name">{l.name}</p>
+              <a href={`/tim/${l.slug}`} class="more-link u-link">
+                Lihat profil <Arrow />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="s-dark dir" data-filter-scope>
+    <div class="wrap">
+      <div class="rel__head">
+        <h2 class="display" data-split>Direktori <em>advokat</em></h2>
+        <p class="label"><span data-filter-count>{lawyers.length}</span> orang</p>
+      </div>
+
+      <div class="fbar">
+        <div class="fbar__group">
+          <div class="chips" data-filter-group="level" role="group" aria-label="Filter jabatan">
+            <button type="button" class="chip" data-filter-value="all" aria-pressed="true">Semua</button>
+            <button type="button" class="chip" data-filter-value="partner" aria-pressed="false">Partner</button>
+            <button type="button" class="chip" data-filter-value="associate" aria-pressed="false">Associate</button>
+          </div>
+          <div class="chips" data-filter-group="office" role="group" aria-label="Filter kantor">
+            <button type="button" class="chip" data-filter-value="all" aria-pressed="true">Semua kantor</button>
+            {
+              firm.offices.map((o) => (
+                <button type="button" class="chip" data-filter-value={o.city.toLowerCase()} aria-pressed="false">
+                  {o.city}
+                </button>
+              ))
+            }
+          </div>
+        </div>
+        <label class="fselect">
+          <span class="sr-only">Filter bidang praktik</span>
+          <select data-filter-group="practice">
+            <option value="all">Semua bidang</option>
+            {practices.map((p) => <option value={p.slug}>{p.title}</option>)}
+          </select>
+        </label>
+      </div>
+
+      <div class="dir__grid" data-filter-grid data-stagger>
+        {
+          lawyers.map((l) => (
+            <a
+              href={`/tim/${l.slug}`}
+              class="tcard"
+              data-filter-item
+              data-level={isPartner(l) ? 'partner' : 'associate'}
+              data-office={l.office.toLowerCase()}
+              data-practice={l.practices.join(' ')}
+            >
+              <div class="tcard__media" data-tilt>
+                <Portrait name={l.name} initials={l.initials} hue={l.hue} />
+                <span class="tcard__tag">{l.office}</span>
+                <span class="tcard__glare" />
+              </div>
+              <p class="tcard__name">{l.name}</p>
+              <p class="tcard__role">{l.role}</p>
+            </a>
+          ))
+        }
+      </div>
+      <p class="empty-note display" data-filter-empty hidden>Belum ada advokat untuk kombinasi filter ini.</p>
+    </div>
+  </section>
+
+  <section class="s-brass careers" id="karier">
+    <div class="wrap careers__grid">
+      <h2 class="careers__title display" data-split>Tumbuh bersama <em>kami.</em></h2>
+      <div class="careers__side" data-reveal>
+        <p>Kami membuka kesempatan bagi lulusan hukum dan advokat berpengalaman yang ingin menangani perkara yang berarti.</p>
+        <a href={`mailto:${firm.careers.email}`} class="btn btn--ink" data-magnetic>Kirim lamaran <Arrow /></a>
+      </div>
+    </div>
+    <div class="wrap careers__values" data-stagger>
+      {
+        firm.careers.values.map((v) => (
+          <div class="cvalue">
+            <h3 class="display">{v.title}</h3>
+            <p>{v.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <NextLink href="/wawasan" title="Wawasan" label="Selanjutnya" />
+</Base>

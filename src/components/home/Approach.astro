@@ -1,0 +1,30 @@
+---
+import { firm } from '../../data/firm';
+import { pad } from '../../lib/utils';
+import Glyph from '../Glyph.astro';
+---
+
+<section class="approach s-light" id="pendekatan">
+  <div class="wrap head-grid">
+    <p class="label">(03) Cara kami bekerja</p>
+    <h2 class="h2 display" data-split>Empat langkah, <em>tanpa kejutan.</em></h2>
+  </div>
+
+  <div class="wrap approach__stack">
+    {
+      firm.approach.map((a, i) => (
+        <article class="acard" data-acard style={`--i:${i}`}>
+          <div class="acard__num display">{pad(i + 1)}</div>
+          <div class="acard__body">
+            <h3 class="display">{a.title}</h3>
+            <p class="acard__lead">{a.lead}</p>
+            <p>{a.body}</p>
+          </div>
+          <div class="acard__art">
+            <Glyph i={i + 4} />
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

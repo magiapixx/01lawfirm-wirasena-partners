@@ -1,0 +1,19 @@
+---
+import { firm } from '../data/firm';
+---
+
+<div class="preloader" aria-hidden="true">
+  <div class="preloader__inner">
+    <div class="preloader__top">
+      <div class="preloader__name">
+        {firm.name.split('').map((c) => <span>{c === ' ' ? ' ' : c}</span>)}
+      </div>
+      <div class="preloader__meta">
+        <span>Est. {firm.founded}</span>
+        <span>{firm.tagline}</span>
+      </div>
+    </div>
+    <div class="preloader__bar"><span data-pl-bar></span></div>
+    <div class="preloader__count"><span data-pl-count>0</span><sup>%</sup></div>
+  </div>
+</div>

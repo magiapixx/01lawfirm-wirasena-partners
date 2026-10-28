@@ -1,0 +1,37 @@
+---
+// Hero untuk halaman indeks (Praktik, Tim, Wawasan). Judul lewat slot "title", dekorasi lewat slot "art".
+interface Props {
+  label: string;
+  lead: string;
+  tone?: 'dark' | 'light';
+  meta?: { value: string; label: string }[];
+}
+
+const { label, lead, tone = 'dark', meta = [] } = Astro.props;
+---
+
+<section class:list={['phead', tone === 'light' ? 's-light' : 's-dark']}>
+  <div class="phead__art">
+    <slot name="art" />
+  </div>
+  <div class="phead__top label">
+    <span>{label}</span>
+    <span>Wirasena &amp; Partners</span>
+  </div>
+  <h1 class="phead__title display" data-split="intro"><slot name="title" /></h1>
+  <div class="wrap phead__bottom">
+    <p class="phead__lead" data-reveal="intro">{lead}</p>
+    {
+      meta.length > 0 && (
+        <dl class="phead__meta" data-reveal="intro">
+          {meta.map((m) => (
+            <div>
+              <dt class="label">{m.label}</dt>
+              <dd class="display">{m.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+  </div>
+</section>

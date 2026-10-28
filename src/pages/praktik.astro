@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Glyph from '../components/Glyph.astro';
+import Portrait from '../components/Portrait.astro';
+import NextLink from '../components/NextLink.astro';
+import Arrow from '../components/Arrow.astro';
+import { practices } from '../data/practices';
+import { lawyers, lawyersByPractice } from '../data/lawyers';
+import { firm } from '../data/firm';
+import { pad } from '../lib/utils';
+---
+
+<Base title="Bidang Praktik" description="Delapan bidang praktik Wirasena & Partners, dari korporasi hingga ketenagakerjaan.">
+  <PageHero
+    label="(Bidang praktik)"
+    lead="Dari ruang rapat hingga ruang sidang, setiap bidang dipimpin partner yang memahami industri klien — bukan hanya pasal-pasalnya."
+    meta={[
+      { value: pad(practices.length), label: 'Bidang' },
+      { value: String(lawyers.length), label: 'Advokat' },
+      { value: String(firm.industries.length), label: 'Industri' },
+    ]}
+  >
+    <Fragment slot="title">Delapan disiplin, <em>satu standar.</em></Fragment>
+    <div slot="art" class="glyph-grid" data-glyph-grid aria-hidden="true">
+      {
+        practices.map((_, i) => (
+          <div class="glyph-grid__cell">
+            <Glyph i={i} />
+          </div>
+        ))
+      }
+    </div>
+  </PageHero>
+
+  <section class="s-light" data-pindex>
+    <div class="wrap pindex">
+      <aside class="pindex__aside">
+        <div class="pindex__sticky">
+          <div class="pindex__num-mask" aria-hidden="true">
+            <div class="pindex__reel" data-reel>
+              {practices.map((_, i) => <span>{pad(i + 1)}</span>)}
+            </div>
+          </div>
+          <div class="pindex__glyphs" aria-hidden="true">
+            {
+              practices.map((_, i) => (
+                <div class:list={['pindex__glyph', { 'is-active': i === 0 }]} data-pindex-glyph>
+                  <Glyph i={i} />
+                </div>
+              ))
+            }
+          </div>
+          <div>
+            <div class="pindex__title-mask" aria-hidden="true">
+              <div class="pindex__reel" data-reel>
+                {practices.map((p) => <span>{p.title}</span>)}
+              </div>
+            </div>
+            <div class="pindex__dots">
+              {
+                practices.map((p, i) => (
+                  <button type="button" class:list={['pindex__dot', { 'is-active': i === 0 }]} data-pindex-dot aria-label={`Ke ${p.title}`} />
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="pindex__list">
+        {
+          practices.map((p, i) => {
+            const team = lawyersByPractice(p.slug);
+            return (
+              <article class:list={['pblock', { 'is-active': i === 0 }]} data-pblock id={p.slug}>
+                <p class="label">({pad(i + 1)}) — {team.length} advokat</p>
+                <h2 class="pblock__title display" data-split>
+                  {p.title}
+                </h2>
+                <div class="pblock__text" data-reveal>
+                  {p.description.map((d) => (
+                    <p>{d}</p>
+                  ))}
+                </div>
+                <ul class="pblock__tags" data-stagger>
+                  {p.services.map((s) => (
+                    <li>{s}</li>
+                  ))}
+                </ul>
+                <div class="pblock__foot">
+                  <div class="avatars">
+                    {team.map((l) => (
+                      <a href={`/tim/${l.slug}`} title={l.name}>
+                        <Portrait name={l.name} initials={l.initials} hue={l.hue} />
+                      </a>
+                    ))}
+                  </div>
+                  <a href={`/layanan/${p.slug}`} class="btn" data-magnetic>
+                    Lihat detail <Arrow />
+                  </a>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="s-dark industries">
+    <div class="wrap head-grid">
+      <p class="label">Industri</p>
+      <h2 class="h2 display" data-split>Sektor yang <em>kami pahami.</em></h2>
+    </div>
+    <ul class="wrap industries__list" data-stagger>
+      {
+        firm.industries.map((ind, i) => (
+          <li class="industries__item">
+            {ind}
+            <sup>{pad(i + 1)}</sup>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <NextLink href="/tim" title="Tim kami" label="Selanjutnya" />
+</Base>

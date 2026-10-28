@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Marquee from '../components/home/Marquee.astro';
+import About from '../components/home/About.astro';
+import Practices from '../components/home/Practices.astro';
+import Approach from '../components/home/Approach.astro';
+import Team from '../components/home/Team.astro';
+import Insights from '../components/home/Insights.astro';
+import Contact from '../components/home/Contact.astro';
+import { firm } from '../data/firm';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: firm.name,
+  email: firm.email,
+  telephone: firm.phone,
+  foundingDate: String(firm.founded),
+  address: firm.offices.map((o) => ({ '@type': 'PostalAddress', streetAddress: o.address, addressLocality: o.city, addressCountry: 'ID' })),
+};
+---
+
+<Base preloader>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+  <div class="intro-stack">
+    <Hero />
+    <Marquee />
+    <About />
+  </div>
+  <Practices />
+  <Approach />
+  <Team />
+  <Insights />
+  <Contact />
+</Base>

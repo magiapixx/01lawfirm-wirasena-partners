@@ -1,0 +1,66 @@
+---
+import { firm } from '../data/firm';
+import { practices } from '../data/practices';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr s-dark">
+  <div class="wrap ftr__top">
+    <div>
+      <p class="label">Punya pertanyaan hukum?</p>
+      <a href={`mailto:${firm.email}`} class="ftr__mail display u-link">{firm.email}</a>
+    </div>
+    <div class="ftr__cols">
+      <div>
+        <h4 class="label">Praktik</h4>
+        <ul>
+          {
+            practices.slice(0, 5).map((p) => (
+              <li>
+                <a class="u-link" href={`/layanan/${p.slug}`}>{p.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h4 class="label">Kantor</h4>
+        <ul>
+          {
+            firm.offices.map((o) => (
+              <li>
+                {o.city}
+                <address>{o.phone}</address>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h4 class="label">Ikuti</h4>
+        <ul>
+          {
+            firm.socials.map((s) => (
+              <li>
+                <a class="u-link" href={s.href}>{s.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="ftr__giant" data-footer-giant aria-hidden="true">
+    {firm.short.split('').map((c) => <span>{c}</span>)}
+  </div>
+
+  <div class="wrap">
+    <div class="ftr__bottom">
+      <p>© {year} {firm.name}. Seluruh data di situs ini fiktif untuk keperluan desain.</p>
+      <p>Informasi di situs ini bersifat umum dan bukan nasihat hukum.</p>
+      <button type="button" data-totop class="u-link">Kembali ke atas ↑</button>
+    </div>
+  </div>
+</footer>

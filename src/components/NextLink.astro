@@ -1,0 +1,17 @@
+---
+import Arrow from './Arrow.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  label?: string;
+  small?: boolean;
+}
+
+const { href, title, label = 'Berikutnya', small = false } = Astro.props;
+---
+
+<a href={href} class:list={['nextlink s-brass', { 'nextlink--sm': small }]} data-cursor="Lanjut">
+  <span class="label">{label}</span>
+  <span class="nextlink__title display">{title} <Arrow /></span>
+</a>

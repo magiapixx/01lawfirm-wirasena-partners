@@ -1,0 +1,62 @@
+---
+// Ikon geometris dekoratif; 8 varian, dipilih dari indeks.
+interface Props {
+  i: number;
+  class?: string;
+}
+
+const { i, class: cls } = Astro.props;
+const v = ((i % 8) + 8) % 8;
+---
+
+<svg class:list={['glyph', cls]} viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+  {v === 0 && (
+    <Fragment>
+      <circle cx="50" cy="50" r="38" />
+      <path d="M6 50h88M50 12v76" />
+    </Fragment>
+  )}
+  {v === 1 && (
+    <Fragment>
+      <circle cx="37" cy="50" r="27" />
+      <circle cx="63" cy="50" r="27" />
+    </Fragment>
+  )}
+  {v === 2 && (
+    <Fragment>
+      <rect x="22" y="22" width="56" height="56" transform="rotate(45 50 50)" />
+      <circle cx="50" cy="50" r="18" />
+    </Fragment>
+  )}
+  {v === 3 && (
+    <Fragment>
+      <path d="M14 40a36 36 0 0 1 72 0" />
+      <path d="M26 44v42M50 44v42M74 44v42M10 88h80M14 40h72" />
+    </Fragment>
+  )}
+  {v === 4 && (
+    <Fragment>
+      <path d="M50 10 90 84H10Z" />
+      <circle cx="50" cy="60" r="15" />
+    </Fragment>
+  )}
+  {v === 5 && (
+    <Fragment>
+      <circle cx="50" cy="50" r="40" />
+      <circle cx="50" cy="50" r="27" />
+      <circle cx="50" cy="50" r="14" />
+    </Fragment>
+  )}
+  {v === 6 && (
+    <Fragment>
+      <path d="M50 8v84M8 50h84M20 20l60 60M80 20 20 80" />
+      <circle cx="50" cy="50" r="7" />
+    </Fragment>
+  )}
+  {v === 7 && (
+    <Fragment>
+      <path d="M14 54a36 36 0 0 1 72 0Z" />
+      <rect x="14" y="54" width="72" height="34" />
+    </Fragment>
+  )}
+</svg>

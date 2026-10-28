@@ -1,0 +1,115 @@
+---
+import Base from '../../layouts/Base.astro';
+import Glyph from '../../components/Glyph.astro';
+import Portrait from '../../components/Portrait.astro';
+import NextLink from '../../components/NextLink.astro';
+import Arrow from '../../components/Arrow.astro';
+import { practices, type Practice } from '../../data/practices';
+import { lawyersByPractice } from '../../data/lawyers';
+import { insights, formatDate } from '../../data/insights';
+import { pad } from '../../lib/utils';
+
+export function getStaticPaths() {
+  return practices.map((practice, index) => ({ params: { slug: practice.slug }, props: { practice, index } }));
+}
+
+interface Props {
+  practice: Practice;
+  index: number;
+}
+
+const { practice, index } = Astro.props;
+const next = practices[(index + 1) % practices.length];
+const team = lawyersByPractice(practice.slug);
+const related = insights.filter((i) => i.practice === practice.slug);
+---
+
+<Base title={practice.title} description={practice.short}>
+  <section class="phero s-dark">
+    <div class="phero__num" data-parallax="0.25" aria-hidden="true">{pad(index + 1)}</div>
+    <div class="wrap">
+      <a href="/praktik" class="crumb label"><Arrow /> Bidang praktik</a>
+      <h1 class="phero__title display" data-split="intro">{practice.title}</h1>
+      <p class="phero__lead" data-reveal="intro">{practice.short}</p>
+    </div>
+    <div class="phero__glyph"><Glyph i={index} /></div>
+  </section>
+
+  <section class="s-light section-pad">
+    <div class="wrap pbody__grid">
+      <aside class="pbody__aside">
+        <div class="pbody__sticky">
+          <p class="label">({pad(index + 1)}) Ringkasan</p>
+          <p>{team.length} advokat · {practice.services.length} layanan</p>
+          <a href="/kontak" class="btn" data-magnetic>Konsultasikan <Arrow /></a>
+        </div>
+      </aside>
+      <div class="pbody__main">
+        {practice.description.map((d) => <p class="pbody__lead display" data-words>{d}</p>)}
+        <ol class="svc" data-stagger>
+          {
+            practice.services.map((s, i) => (
+              <li>
+                <span class="svc__n">{pad(i + 1)}</span>
+                <span>{s}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  {
+    team.length > 0 && (
+      <section class="s-dark section-pad">
+        <div class="wrap">
+          <div class="rel__head">
+            <h2 class="display" data-split>
+              Advokat <em>terkait</em>
+            </h2>
+            <p class="label">{team.length} orang</p>
+          </div>
+          <div class="rel__grid" data-stagger>
+            {team.map((l) => (
+              <a href={`/tim/${l.slug}`} class="lcard" data-cursor="Profil">
+                <div class="lcard__img">
+                  <Portrait name={l.name} initials={l.initials} hue={l.hue} />
+                </div>
+                <p class="lcard__name display">{l.name}</p>
+                <p class="lcard__role">{l.role}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    related.length > 0 && (
+      <section class="s-light section-pad">
+        <div class="wrap">
+          <div class="rel__head">
+            <h2 class="display" data-split>
+              Wawasan <em>terkait</em>
+            </h2>
+          </div>
+          <ul class="alist">
+            {related.map((a) => (
+              <li>
+                <a href={`/wawasan/${a.slug}`}>
+                  <span class="alist__meta">{formatDate(a.date)}</span>
+                  <span class="alist__title">{a.title}</span>
+                  <span class="alist__meta">{a.readTime} menit</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <NextLink href={`/layanan/${next.slug}`} title={next.title} />
+</Base>

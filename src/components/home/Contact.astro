@@ -1,0 +1,76 @@
+---
+import { firm } from '../../data/firm';
+import { practices } from '../../data/practices';
+import Arrow from '../Arrow.astro';
+---
+
+<section class="contact" id="kontak" data-contact>
+  <div class="contact__bg" aria-hidden="true"></div>
+  <div class="wrap contact__inner">
+    <h2 class="contact__big display" data-contact-big>Mari <em>bicara.</em></h2>
+
+    <div class="contact__grid">
+      <div class="contact__info">
+        <div class="contact__direct">
+          <span class="label">Email</span>
+          <a class="u-link" href={`mailto:${firm.email}`}>{firm.email}</a>
+        </div>
+        <div class="contact__direct">
+          <span class="label">Telepon</span>
+          <a class="u-link" href={`tel:${firm.phone.replace(/\s/g, '')}`}>{firm.phone}</a>
+        </div>
+        {
+          firm.offices.map((o) => (
+            <div>
+              <strong>{o.city}</strong>
+              <address>{o.address}</address>
+            </div>
+          ))
+        }
+        <p class="label">{firm.hours}</p>
+      </div>
+
+      <form class="cform" data-form novalidate>
+        <div class="field">
+          <input id="f-nama" name="nama" type="text" autocomplete="name" placeholder=" " required />
+          <label for="f-nama">Nama lengkap*</label>
+        </div>
+        <div class="field">
+          <input id="f-email" name="email" type="email" autocomplete="email" placeholder=" " required />
+          <label for="f-email">Email*</label>
+        </div>
+        <div class="field">
+          <input id="f-telp" name="telepon" type="tel" autocomplete="tel" placeholder=" " />
+          <label for="f-telp">Telepon</label>
+        </div>
+        <div class="field">
+          <input id="f-org" name="perusahaan" type="text" autocomplete="organization" placeholder=" " />
+          <label for="f-org">Perusahaan</label>
+        </div>
+        <div class="field field--full field--select">
+          <select id="f-bidang" name="bidang" required>
+            <option value="" disabled selected>Pilih bidang</option>
+            {practices.map((p) => <option value={p.slug}>{p.title}</option>)}
+            <option value="lainnya">Lainnya</option>
+          </select>
+          <label for="f-bidang">Bidang yang dibutuhkan*</label>
+        </div>
+        <div class="field field--full">
+          <textarea id="f-pesan" name="pesan" placeholder=" " required></textarea>
+          <label for="f-pesan">Gambaran singkat kebutuhan Anda*</label>
+        </div>
+        <label class="cform__consent">
+          <input type="checkbox" name="consent" required />
+          <span>Saya menyetujui pemrosesan data pribadi saya untuk keperluan menanggapi pertanyaan ini, sesuai Kebijakan Privasi.*</span>
+        </label>
+        <p class="cform__note">
+          Mengirim formulir ini tidak membentuk hubungan advokat–klien. Mohon tidak mencantumkan informasi rahasia terkait perkara.
+        </p>
+        <div class="cform__actions">
+          <button class="btn btn--ink" type="submit" data-magnetic>Kirim pesan <Arrow /></button>
+          <p class="cform__status" data-form-status role="status"></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

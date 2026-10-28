@@ -1,0 +1,31 @@
+---
+import { practices } from '../../data/practices';
+
+const rows = [
+  { mod: 'a', dir: 1 },
+  { mod: 'b', dir: -1 },
+];
+---
+
+<section class="marquee" aria-label="Ringkasan bidang praktik">
+  {
+    rows.map((r) => (
+      <div class={`marquee__row marquee__row--${r.mod}`} data-marquee={r.dir} aria-hidden={r.mod === 'b' ? 'true' : undefined}>
+        <div class="marquee__track">
+          {[0, 1].map((g) => (
+            <div class="marquee__group" aria-hidden={g === 1 ? 'true' : undefined}>
+              {practices.map((p) => (
+                <span class="marquee__item">
+                  {p.title}
+                  <svg class="marquee__star" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M10 0c.6 5.2 4.8 9.4 10 10-5.2.6-9.4 4.8-10 10-.6-5.2-4.8-9.4-10-10C5.2 9.4 9.4 5.2 10 0Z" fill="currentColor" />
+                  </svg>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</section>

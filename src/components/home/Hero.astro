@@ -1,0 +1,48 @@
+---
+import { firm } from '../../data/firm';
+import Arrow from '../Arrow.astro';
+
+const ring = `${firm.name} · ${firm.tagline} · Est. ${firm.founded} · `;
+---
+
+<section class="hero s-dark" data-hero>
+  <div class="hero__inner">
+    <div class="hero__glow" aria-hidden="true"></div>
+
+    <div class="hero__seal" data-hero-seal aria-hidden="true">
+      <div class="hero__seal-scroll">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <path id="seal-circle" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"></path>
+          </defs>
+          <!-- textLength = keliling lingkaran (2π × 82), agar ujung teks tidak menumpuk awalnya -->
+          <text><textPath href="#seal-circle" textLength="514" lengthAdjust="spacing">{ring}</textPath></text>
+        </svg>
+      </div>
+      <span class="hero__seal-mono">W&amp;P</span>
+    </div>
+
+    <div class="hero__top wrap">
+      <p class="label" data-hero-fade>(Firma Hukum) — {firm.offices.map((o) => o.city).join(' · ')}</p>
+      <p class="label" data-hero-fade>Est. {firm.founded}</p>
+    </div>
+
+    <h1 class="hero__title display">
+      <span class="hero__line" data-hero-line>Hukum yang</span>
+      <span class="hero__line" data-hero-line><em>presisi,</em> strategi</span>
+      <span class="hero__line" data-hero-line>yang <em>berani.</em></span>
+    </h1>
+
+    <div class="hero__bottom wrap">
+      <p class="hero__lead" data-hero-fade>
+        {firm.name} mendampingi korporasi, institusi, dan individu dalam perkara serta transaksi paling kompleks di Indonesia
+        sejak {firm.founded}.
+      </p>
+      <div class="hero__ctas" data-hero-fade>
+        <a href="#kontak" class="btn btn--brass" data-magnetic>Jadwalkan konsultasi <Arrow /></a>
+        <a href="#praktik" class="btn" data-magnetic>Bidang praktik</a>
+      </div>
+      <div class="hero__scroll" data-hero-fade><span>Gulir</span><i></i></div>
+    </div>
+  </div>
+</section>

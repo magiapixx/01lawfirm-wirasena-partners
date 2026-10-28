@@ -1,0 +1,63 @@
+---
+// Sampul artikel generatif (pengganti foto sampul).
+import Glyph from './Glyph.astro';
+
+interface Props {
+  seed: number;
+  label?: string;
+}
+
+const { seed, label } = Astro.props;
+const palettes = [
+  ['#1f1f24', '#b8925a'],
+  ['#b8925a', '#0c0c0e'],
+  ['#e4ded2', '#0c0c0e'],
+  ['#2a2520', '#d6b98a'],
+  ['#5b4a33', '#efebe3'],
+  ['#141417', '#efebe3'],
+];
+const [bg, fg] = palettes[seed % palettes.length];
+---
+
+<div class="cover" style={`--cover-bg:${bg};--cover-fg:${fg}`}>
+  <div class="cover__glyph"><Glyph i={seed + 3} /></div>
+  {label && <span class="cover__label">{label}</span>}
+</div>
+
+<style>
+  .cover {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 30% 20%, rgb(255 255 255 / 0.08), transparent 55%),
+      var(--cover-bg);
+    color: var(--cover-fg);
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 3.5rem);
+    opacity: 0.08;
+  }
+
+  .cover__glyph {
+    width: 42%;
+    max-width: 16rem;
+  }
+
+  .cover__label {
+    position: absolute;
+    left: 1.25rem;
+    bottom: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+</style>

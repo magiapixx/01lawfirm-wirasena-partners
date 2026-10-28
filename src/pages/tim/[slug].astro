@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+import Portrait from '../../components/Portrait.astro';
+import NextLink from '../../components/NextLink.astro';
+import Arrow from '../../components/Arrow.astro';
+import { lawyers, type Lawyer } from '../../data/lawyers';
+import { getPractice } from '../../data/practices';
+import { insights, formatDate } from '../../data/insights';
+
+export function getStaticPaths() {
+  return lawyers.map((lawyer, index) => ({ params: { slug: lawyer.slug }, props: { lawyer, index } }));
+}
+
+interface Props {
+  lawyer: Lawyer;
+  index: number;
+}
+
+const { lawyer, index } = Astro.props;
+const next = lawyers[(index + 1) % lawyers.length];
+const [first, ...rest] = lawyer.name.split(' ');
+const areas = lawyer.practices.map((s) => getPractice(s)).filter((p) => p !== undefined);
+const written = insights.filter((i) => i.author === lawyer.slug);
+---
+
+<Base title={lawyer.name} description={`${lawyer.name}, ${lawyer.role} di Wirasena & Partners.`}>
+  <section class="lhero s-dark">
+    <div class="wrap lhero__grid">
+      <div class="lhero__portrait" data-clip="intro">
+        <Portrait name={lawyer.name} initials={lawyer.initials} hue={lawyer.hue} />
+      </div>
+      <div class="lhero__info">
+        <a href="/tim" class="crumb label"><Arrow /> Tim kami</a>
+        <p class="label">{lawyer.role}</p>
+        <h1 class="lhero__name display" data-split="intro">{first}<br /><em>{rest.join(' ')}</em></h1>
+        <dl class="lhero__facts" data-reveal="intro">
+          <div>
+            <dt class="label">Bidang</dt>
+            <dd>
+              {
+                areas.map((p, i) => (
+                  <Fragment>
+                    <a class="u-link" href={`/layanan/${p.slug}`}>{p.title}</a>
+                    {i < areas.length - 1 && ', '}
+                  </Fragment>
+                ))
+              }
+            </dd>
+          </div>
+          <div>
+            <dt class="label">Bahasa</dt>
+            <dd>{lawyer.languages.join(', ')}</dd>
+          </div>
+          <div>
+            <dt class="label">Email</dt>
+            <dd><a class="u-link" href={`mailto:${lawyer.email}`}>{lawyer.email}</a></dd>
+          </div>
+          <div>
+            <dt class="label">Kantor</dt>
+            <dd>{lawyer.office}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-light section-pad">
+    <div class="wrap lbody__grid">
+      <div class="lbody__bio">
+        {lawyer.bio.map((b) => <p data-words>{b}</p>)}
+      </div>
+      <div class="lbody__side">
+        <div data-reveal>
+          <p class="label">Pendidikan</p>
+          <ul>{lawyer.education.map((e) => <li>{e}</li>)}</ul>
+        </div>
+        <div data-reveal>
+          <p class="label">Izin & keanggotaan</p>
+          <ul>{lawyer.admissions.map((a) => <li>{a}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+
+    {
+      written.length > 0 && (
+        <div class="wrap" style="margin-top: clamp(4rem, 8vw, 7rem)">
+          <div class="rel__head">
+            <h2 class="display" data-split>
+              Tulisan <em>terbaru</em>
+            </h2>
+          </div>
+          <ul class="alist">
+            {written.map((a) => (
+              <li>
+                <a href={`/wawasan/${a.slug}`}>
+                  <span class="alist__meta">{formatDate(a.date)}</span>
+                  <span class="alist__title">{a.title}</span>
+                  <span class="alist__meta">{a.readTime} menit</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </section>
+
+  <NextLink href={`/tim/${next.slug}`} title={next.name} label="Advokat berikutnya" />
+</Base>

@@ -1,0 +1,41 @@
+---
+import { insights, formatDate } from '../../data/insights';
+import { getLawyer } from '../../data/lawyers';
+import Cover from '../Cover.astro';
+import Arrow from '../Arrow.astro';
+
+const items = insights.slice(0, 4);
+const speeds = [0.04, 0.14, 0.08, 0.18];
+---
+
+<section class="insights s-light" id="wawasan">
+  <div class="wrap head-grid">
+    <p class="label">(05) Wawasan</p>
+    <div>
+      <h2 class="h2 display" data-split>Catatan dari <em>meja kami.</em></h2>
+      <a href="/wawasan" class="more-link u-link">Semua {insights.length} artikel <Arrow /></a>
+    </div>
+  </div>
+
+  <div class="wrap insights__grid">
+    {
+      items.map((a, i) => (
+        <a href={`/wawasan/${a.slug}`} class={`icard icard--${i}`} data-parallax={speeds[i]} data-cursor="Baca">
+          <div class="icard__cover">
+            <Cover seed={i} label={a.category} />
+          </div>
+          <div class="icard__meta label">
+            <span>{a.category}</span>
+            <span>{formatDate(a.date)}</span>
+          </div>
+          <h3 class="icard__title">
+            <span>{a.title}</span>
+          </h3>
+          <p class="icard__author">
+            {getLawyer(a.author)?.name} · {a.readTime} menit baca
+          </p>
+        </a>
+      ))
+    }
+  </div>
+</section>

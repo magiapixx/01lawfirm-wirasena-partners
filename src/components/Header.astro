@@ -1,0 +1,79 @@
+---
+import { firm } from '../data/firm';
+import { pad } from '../lib/utils';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+// match: awalan path yang membuat item menu dianggap aktif (termasuk halaman detailnya).
+const nav = [
+  { label: 'Praktik', href: '/praktik', match: ['/praktik', '/layanan'] },
+  { label: 'Tim', href: '/tim', match: ['/tim'] },
+  { label: 'Wawasan', href: '/wawasan', match: ['/wawasan'] },
+  { label: 'Kontak', href: '/kontak', match: ['/kontak'] },
+];
+const isActive = (match: string[]) => match.some((m) => path === m || path.startsWith(`${m}/`));
+
+const links = [
+  { label: 'Beranda', href: '/', match: [] as string[] },
+  { label: 'Bidang Praktik', href: '/praktik', match: nav[0].match },
+  { label: 'Cara Kami Bekerja', href: '/#pendekatan', match: [] as string[] },
+  { label: 'Tim', href: '/tim', match: nav[1].match },
+  { label: 'Wawasan', href: '/wawasan', match: nav[2].match },
+  { label: 'Kontak', href: '/kontak', match: nav[3].match },
+];
+---
+
+<header class="hdr" data-header>
+  <a href="/" class="hdr__logo" aria-label={`${firm.name} — Beranda`} data-magnetic="0.2">
+    <span class="hdr__mono">W<em>&</em>P</span>
+    <span class="hdr__name">Wirasena<br />&amp; Partners</span>
+  </a>
+
+  <nav class="hdr__nav" aria-label="Navigasi utama">
+    {
+      nav.map((n) => (
+        <a class="u-link" href={n.href} aria-current={isActive(n.match) ? 'page' : undefined}>
+          {n.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="hdr__right">
+    <span class="hdr__clock">JKT <span data-clock>--.--</span> WIB</span>
+    <button class="hdr__menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu" data-magnetic="0.25">
+      <span class="hdr__menu-label">Menu</span>
+      <span class="hdr__burger"><i></i><i></i></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu inert>
+  <div class="menu__bg"></div>
+  <div class="menu__inner">
+    <nav class="menu__nav" aria-label="Menu">
+      {
+        links.map((l, i) => (
+          <a href={l.href} class="menu__link" aria-current={isActive(l.match) ? 'page' : undefined}>
+            <span class="menu__num">{pad(i + 1)}</span>
+            <span class="menu__txt">{l.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+    <div class="menu__aside">
+      <div>
+        <span class="label">Kantor pusat</span>
+        <p>{firm.offices[0].address}</p>
+      </div>
+      <div>
+        <span class="label">Hubungi</span>
+        <p><a class="u-link" href={`mailto:${firm.email}`}>{firm.email}</a></p>
+        <p>{firm.phone}</p>
+      </div>
+      <div class="menu__socials">
+        {firm.socials.map((s) => <a class="u-link" href={s.href}>{s.label}</a>)}
+      </div>
+    </div>
+  </div>
+</div>

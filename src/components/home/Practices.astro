@@ -1,0 +1,43 @@
+---
+import { practices } from '../../data/practices';
+import { pad } from '../../lib/utils';
+import Glyph from '../Glyph.astro';
+import Arrow from '../Arrow.astro';
+---
+
+<section class="practices s-dark" id="praktik" data-hscroll>
+  <div class="practices__track" data-hscroll-track>
+    <div class="practices__intro">
+      <div>
+        <p class="label">(02) Bidang praktik</p>
+        <h2 class="practices__title display" data-split>Delapan disiplin. <em>Satu standar.</em></h2>
+        <a href="/praktik" class="more-link u-link">Semua bidang praktik <Arrow /></a>
+      </div>
+      <p class="practices__hint">Gulir untuk menjelajah <Arrow /></p>
+    </div>
+
+    {
+      practices.map((p, i) => (
+        <a href={`/layanan/${p.slug}`} class="pcard" data-cursor="Buka">
+          <div class="pcard__top">
+            <span class="pcard__num">{pad(i + 1)}</span>
+            <div class="pcard__glyph">
+              <Glyph i={i} />
+            </div>
+          </div>
+          <h3 class="pcard__title display">{p.title}</h3>
+          <p class="pcard__short">{p.short}</p>
+          <ul class="pcard__list">
+            {p.services.slice(0, 3).map((s) => (
+              <li>{s}</li>
+            ))}
+          </ul>
+          <span class="pcard__more">
+            Selengkapnya <Arrow />
+          </span>
+        </a>
+      ))
+    }
+  </div>
+  <div class="practices__progress" aria-hidden="true"><span data-hscroll-progress></span></div>
+</section>

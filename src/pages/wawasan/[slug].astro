@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cover from '../../components/Cover.astro';
+import Portrait from '../../components/Portrait.astro';
+import NextLink from '../../components/NextLink.astro';
+import Arrow from '../../components/Arrow.astro';
+import { insights, formatDate, type Insight } from '../../data/insights';
+import { getLawyer } from '../../data/lawyers';
+import { getPractice } from '../../data/practices';
+
+export function getStaticPaths() {
+  return insights.map((insight, index) => ({ params: { slug: insight.slug }, props: { insight, index } }));
+}
+
+interface Props {
+  insight: Insight;
+  index: number;
+}
+
+const { insight, index } = Astro.props;
+const author = getLawyer(insight.author);
+const practice = getPractice(insight.practice);
+const next = insights[(index + 1) % insights.length];
+---
+
+<Base title={insight.title} description={insight.excerpt}>
+  <div class="readbar" data-readbar aria-hidden="true"></div>
+  <article data-article>
+    <header class="ahero s-light">
+      <div class="wrap">
+        <a href="/wawasan" class="crumb label"><Arrow /> Wawasan</a>
+        <div class="ahero__meta label">
+          <span>{insight.category}</span>
+          <span>{formatDate(insight.date)}</span>
+          <span>{insight.readTime} menit baca</span>
+        </div>
+        <h1 class="ahero__title display" data-split="intro">{insight.title}</h1>
+        {
+          author && (
+            <a href={`/tim/${author.slug}`} class="ahero__author" data-reveal="intro">
+              <span class="ahero__avatar">
+                <Portrait name={author.name} initials={author.initials} hue={author.hue} />
+              </span>
+              <span>
+                <strong>{author.name}</strong>
+                <span>{author.role}</span>
+              </span>
+            </a>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="s-light">
+      <div class="acover">
+        <div class="acover__inner" data-parallax="0.12">
+          <Cover seed={index} label={practice?.title} />
+        </div>
+      </div>
+
+      <div class="wrap abody">
+        <aside class="abody__aside">
+          <p class="label">Ringkasan</p>
+          <p style="margin-top: 0.75rem">{insight.excerpt}</p>
+        </aside>
+        <div class="abody__text">
+          {insight.body.map((p) => <p data-reveal>{p}</p>)}
+          <p class="abody__note">
+            Artikel ini fiktif dan dibuat untuk keperluan desain. Isinya bersifat umum dan bukan nasihat hukum. Untuk situasi
+            spesifik, konsultasikan dengan advokat.
+          </p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <NextLink href={`/wawasan/${next.slug}`} title={next.title} label="Artikel berikutnya" small />
+</Base>

@@ -1,0 +1,49 @@
+---
+import { firm } from '../../data/firm';
+
+const columns = [80, 168, 256, 344, 432, 520];
+---
+
+<section class="about s-light" id="tentang">
+  <div class="wrap head-grid">
+    <p class="label">(01) Tentang kami</p>
+    <p class="about__text display" data-words>
+      Kami percaya nasihat hukum terbaik lahir dari pemahaman <em>mendalam</em> atas bisnis klien. Selama hampir tiga dekade, kami
+      memadukan ketelitian akademik dengan keberanian strategis — di ruang rapat, ruang sidang, dan meja negosiasi.
+    </p>
+  </div>
+
+  <div class="wrap about__lower">
+    <figure class="about__art">
+      <svg viewBox="0 0 600 380" fill="none" stroke="currentColor" stroke-width="1.2" data-draw aria-hidden="true">
+        <path pathLength="1" d="M40 120 300 30l260 90Z"></path>
+        <circle pathLength="1" cx="300" cy="88" r="18"></circle>
+        <path pathLength="1" d="M30 120h540M30 138h540M44 150h512"></path>
+        {
+          columns.map((x) => (
+            <path pathLength="1" d={`M${x - 20} 150h40M${x - 15} 162h30M${x - 12} 162v166M${x + 12} 162v166M${x - 20} 328h40`} />
+          ))
+        }
+        <path pathLength="1" d="M20 340h560M10 356h580M0 372h600"></path>
+      </svg>
+      <figcaption class="about__caption label">
+        <span>Fig. 01 — Fondasi</span>
+        <span>Jakarta, {firm.founded}</span>
+      </figcaption>
+    </figure>
+
+    <div class="about__stats">
+      {
+        firm.stats.map((s) => (
+          <div class="stat" data-reveal>
+            <span class="stat__num display">
+              <span data-counter={s.value}>{s.value.toLocaleString('id-ID')}</span>
+              {s.suffix}
+            </span>
+            <span class="stat__label">{s.label}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,140 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Cover from '../components/Cover.astro';
+import NextLink from '../components/NextLink.astro';
+import Arrow from '../components/Arrow.astro';
+import { insights, formatDate } from '../data/insights';
+import { getLawyer } from '../data/lawyers';
+import { getPractice } from '../data/practices';
+
+const [featured, ...rest] = insights;
+const featuredAuthor = getLawyer(featured.author);
+const categories = [...new Set(insights.map((i) => i.category))];
+const authors = new Set(insights.map((i) => i.author));
+---
+
+<Base title="Wawasan" description="Analisis, panduan, dan perspektif hukum dari tim Wirasena & Partners.">
+  <PageHero
+    tone="light"
+    label="(Wawasan)"
+    lead="Analisis regulasi, panduan praktis, dan perspektif dari meja kerja kami — ditulis untuk pengambil keputusan, bukan hanya untuk sesama advokat."
+    meta={[
+      { value: String(insights.length), label: 'Artikel' },
+      { value: String(categories.length), label: 'Kategori' },
+      { value: String(authors.size), label: 'Penulis' },
+    ]}
+  >
+    <Fragment slot="title">Catatan dari <em>meja kami.</em></Fragment>
+  </PageHero>
+
+  <section class="s-light feat-sec">
+    <a href={`/wawasan/${featured.slug}`} class="wrap feat" data-cursor="Baca">
+      <div class="feat__cover" data-clip>
+        <div class="feat__inner" data-parallax="0.1">
+          <Cover seed={0} label={getPractice(featured.practice)?.title} />
+        </div>
+      </div>
+      <div class="feat__body" data-reveal>
+        <div class="feat__meta label">
+          <span>Pilihan redaksi</span>
+          <span>{featured.category}</span>
+          <span>{formatDate(featured.date)}</span>
+        </div>
+        <h2 class="feat__title display"><span>{featured.title}</span></h2>
+        <p class="feat__excerpt">{featured.excerpt}</p>
+        <p class="feat__author">{featuredAuthor?.name} · {featured.readTime} menit baca</p>
+      </div>
+    </a>
+  </section>
+
+  <section class="s-light wlist" data-filter-scope>
+    <div class="wrap">
+      <div class="fbar">
+        <div class="chips" data-filter-group="category" role="group" aria-label="Filter kategori">
+          <button type="button" class="chip" data-filter-value="all" aria-pressed="true">Semua</button>
+          {
+            categories.map((c) => (
+              <button type="button" class="chip" data-filter-value={c.toLowerCase()} aria-pressed="false">
+                {c}
+              </button>
+            ))
+          }
+        </div>
+        <div class="fbar__group">
+          <label class="fsearch">
+            <span class="sr-only">Cari artikel</span>
+            <input type="search" placeholder="Cari judul, topik, penulis…" data-filter-search />
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+              <circle cx="7" cy="7" r="5"></circle>
+              <path d="m11 11 4 4"></path>
+            </svg>
+          </label>
+          <div class="fview" role="group" aria-label="Tampilan">
+            <button type="button" class="chip" data-view="grid" aria-pressed="true">Grid</button>
+            <button type="button" class="chip" data-view="list" aria-pressed="false">Daftar</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="label wlist__count"><span data-filter-count>{rest.length}</span> artikel</p>
+
+      <div class="wgrid" data-filter-grid>
+        {
+          rest.map((a, i) => {
+            const author = getLawyer(a.author);
+            return (
+              <a
+                href={`/wawasan/${a.slug}`}
+                class="wcard"
+                data-filter-item
+                data-category={a.category.toLowerCase()}
+                data-search={`${a.title} ${a.excerpt} ${author?.name ?? ''} ${a.category}`.toLowerCase()}
+              >
+                <div class="wcard__cover" data-flip-cover>
+                  <Cover seed={i + 1} label={a.category} />
+                </div>
+                <div class="wcard__body">
+                  <div class="wcard__meta label">
+                    <span>{a.category}</span>
+                    <span>{formatDate(a.date)}</span>
+                  </div>
+                  <h3 class="wcard__title">
+                    <span>{a.title}</span>
+                  </h3>
+                  <p class="wcard__excerpt">{a.excerpt}</p>
+                  <p class="wcard__foot">
+                    {author?.name} · {a.readTime} menit
+                  </p>
+                </div>
+              </a>
+            );
+          })
+        }
+      </div>
+      <p class="empty-note display" data-filter-empty hidden>Tidak ada artikel yang cocok.</p>
+    </div>
+  </section>
+
+  <section class="s-dark news">
+    <div class="wrap news__grid">
+      <h2 class="news__title display" data-split>Ringkasan bulanan, <em>tanpa basa-basi.</em></h2>
+      <form class="news__form" data-form data-success="Terima kasih! Ini versi demo — tidak ada email yang didaftarkan." novalidate>
+        <div class="field">
+          <input id="n-email" name="email" type="email" autocomplete="email" placeholder=" " required />
+          <label for="n-email">Alamat email*</label>
+        </div>
+        <label class="news__consent">
+          <input type="checkbox" name="consent" required />
+          <span>Saya bersedia menerima email ringkasan dan dapat berhenti berlangganan kapan saja.*</span>
+        </label>
+        <div class="cform__actions">
+          <button class="btn btn--brass" type="submit" data-magnetic>Berlangganan <Arrow /></button>
+          <p class="cform__status" data-form-status role="status"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <NextLink href="/kontak" title="Kontak" label="Selanjutnya" />
+</Base>

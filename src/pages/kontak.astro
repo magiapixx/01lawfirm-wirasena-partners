@@ -1,0 +1,277 @@
+---
+import Base from '../layouts/Base.astro';
+import Glyph from '../components/Glyph.astro';
+import NextLink from '../components/NextLink.astro';
+import Arrow from '../components/Arrow.astro';
+import { firm } from '../data/firm';
+import { practices } from '../data/practices';
+
+// Garis meridian Indonesia kira-kira 95°BT–141°BT.
+const lngMin = 95;
+const lngMax = 141;
+const markerLeft = (lng: number) => `${((lng - lngMin) / (lngMax - lngMin)) * 100}%`;
+---
+
+<Base title="Kontak" description="Hubungi Wirasena & Partners di Jakarta, Surabaya, atau Denpasar.">
+  <section class="khero s-dark">
+    <div class="wrap khero__top label">
+      <span>(Kontak)</span>
+      <span>Kami membalas dalam 1 hari kerja</span>
+    </div>
+
+    <h1 class="khero__big display" data-repel aria-label="Mari bicara.">
+      <span class="khero__line" data-repel-line aria-hidden="true">Mari</span>
+      <span class="khero__line khero__line--2" data-repel-line aria-hidden="true"><em>bicara.</em></span>
+    </h1>
+
+    <div class="wrap khero__strip" data-reveal="intro">
+      <div>
+        <span class="label">Email</span><br />
+        <a class="u-link" href={`mailto:${firm.email}`}>{firm.email}</a>
+      </div>
+      <div>
+        <span class="label">Telepon</span><br />
+        <a class="u-link" href={`tel:${firm.phone.replace(/\s/g, '')}`}>{firm.phone}</a>
+      </div>
+      <div>
+        <span class="label">WhatsApp</span><br />
+        <a class="u-link" href="#">{firm.whatsapp}</a>
+      </div>
+      <div>
+        <span class="label">Jam kerja</span><br />
+        <p>Sen–Jum, 08.30–18.00</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-light offices" data-offices>
+    <div class="wrap">
+      <div class="head-grid">
+        <p class="label">Kantor</p>
+        <h2 class="h2 display" data-split>Tiga kota, <em>satu tim.</em></h2>
+      </div>
+
+      <div class="chips offices__tabs" role="tablist" aria-label="Pilih kantor">
+        {
+          firm.offices.map((o, i) => (
+            <button
+              type="button"
+              class="chip"
+              role="tab"
+              id={`office-tab-${i}`}
+              aria-controls={`office-panel-${i}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+            >
+              {o.city}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="offices__panels">
+        {
+          firm.offices.map((o, i) => (
+            <div
+              class:list={['opanel', { 'is-active': i === 0 }]}
+              role="tabpanel"
+              id={`office-panel-${i}`}
+              aria-labelledby={`office-tab-${i}`}
+              inert={i !== 0}
+            >
+              <p class="opanel__city display" data-city>
+                {o.city}
+              </p>
+              <div class="opanel__info">
+                <div class="opanel__clock" data-tz={o.tz}>
+                  <span class="label">Waktu setempat · {o.zone}</span>
+                  <strong data-clock-time>--.--.--</strong>
+                  <span class="opanel__status" data-clock-status>
+                    Memuat…
+                  </span>
+                </div>
+                <address>{o.address}</address>
+                <p>
+                  <a class="u-link" href={`tel:${o.phone.replace(/\s/g, '')}`}>
+                    {o.phone}
+                  </a>
+                  <br />
+                  <a class="u-link" href={`mailto:${o.email}`}>
+                    {o.email}
+                  </a>
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="meridian">
+        <span class="meridian__end">{lngMin}°BT</span>
+        <span class="meridian__end meridian__end--r">{lngMax}°BT</span>
+        {
+          firm.offices.map((o, i) => (
+            <button
+              type="button"
+              class:list={['meridian__marker', { 'is-active': i === 0, 'meridian__marker--up': i % 2 === 1 }]}
+              style={`left:${markerLeft(o.lng)}`}
+              data-marker
+              tabindex="-1"
+              aria-label={`Pilih kantor ${o.city}`}
+            >
+              <i />
+              <span>{o.city}</span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="s-light sform-sec" id="formulir">
+    <div class="wrap sform-grid">
+      <div class="sform-aside">
+        <div class="sform-aside__inner">
+          <p class="label">Formulir konsultasi</p>
+          <h2 class="sform-title display" data-split>Tiga langkah <em>singkat.</em></h2>
+          <ol class="sform-steps">
+            <li class="is-active" data-step-label><span>01</span>Kebutuhan</li>
+            <li data-step-label><span>02</span>Detail</li>
+            <li data-step-label><span>03</span>Kontak</li>
+          </ol>
+          <p class="sform-note">
+            Mengirim formulir ini tidak membentuk hubungan advokat–klien. Mohon tidak mencantumkan informasi rahasia terkait perkara.
+          </p>
+        </div>
+      </div>
+
+      <div class="sform-main">
+        <form class="sform" data-stepform novalidate>
+          <div class="sform__head">
+            <span class="label" data-step-count>01 / 03</span>
+            <div class="sform__progress"><span data-step-bar></span></div>
+          </div>
+
+          <fieldset class="sform__step" data-step>
+            <legend class="sform__legend display">Apa yang Anda butuhkan?</legend>
+            <div class="choice-grid">
+              {
+                practices.map((p, i) => (
+                  <label class="choice">
+                    <input type="radio" name="bidang" value={p.title} required={i === 0} />
+                    <span>
+                      <Glyph i={i} />
+                      <strong>{p.title}</strong>
+                    </span>
+                  </label>
+                ))
+              }
+              <label class="choice">
+                <input type="radio" name="bidang" value="Lainnya" />
+                <span>
+                  <Glyph i={5} />
+                  <strong>Lainnya / belum yakin</strong>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="sform__step" data-step hidden>
+            <legend class="sform__legend display">Ceritakan singkat situasinya.</legend>
+            <div class="sform__fields">
+              <div class="field field--full">
+                <textarea id="s-pesan" name="pesan" placeholder=" " required></textarea>
+                <label for="s-pesan">Gambaran singkat, tanpa detail rahasia*</label>
+              </div>
+              <div class="field field--full">
+                <input id="s-org" name="perusahaan" type="text" autocomplete="organization" placeholder=" " />
+                <label for="s-org">Perusahaan / institusi</label>
+              </div>
+              <div class="pills" role="radiogroup" aria-label="Tingkat urgensi">
+                <span class="label">Urgensi</span>
+                <label class="pill"><input type="radio" name="urgensi" value="Normal" checked /><span>Normal</span></label>
+                <label class="pill"><input type="radio" name="urgensi" value="Minggu ini" /><span>Minggu ini</span></label>
+                <label class="pill"><input type="radio" name="urgensi" value="Mendesak" /><span>Mendesak</span></label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="sform__step" data-step hidden>
+            <legend class="sform__legend display">Bagaimana kami menghubungi Anda?</legend>
+            <div class="sform__fields">
+              <div class="field">
+                <input id="s-nama" name="nama" type="text" autocomplete="name" placeholder=" " required />
+                <label for="s-nama">Nama lengkap*</label>
+              </div>
+              <div class="field">
+                <input id="s-email" name="email" type="email" autocomplete="email" placeholder=" " required />
+                <label for="s-email">Email*</label>
+              </div>
+              <div class="field field--full">
+                <input id="s-telp" name="telepon" type="tel" autocomplete="tel" placeholder=" " />
+                <label for="s-telp">Telepon</label>
+              </div>
+              <div class="pills" role="radiogroup" aria-label="Cara dihubungi">
+                <span class="label">Hubungi via</span>
+                <label class="pill"><input type="radio" name="via" value="email" checked /><span>Email</span></label>
+                <label class="pill"><input type="radio" name="via" value="telepon" /><span>Telepon</span></label>
+                <label class="pill"><input type="radio" name="via" value="WhatsApp" /><span>WhatsApp</span></label>
+              </div>
+              <label class="cform__consent">
+                <input type="checkbox" name="consent" required />
+                <span>Saya menyetujui pemrosesan data pribadi saya untuk keperluan menanggapi permintaan ini, sesuai Kebijakan Privasi.*</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <p class="sform__status" data-step-status role="status"></p>
+
+          <div class="sform__nav">
+            <button type="button" class="btn" data-step-prev hidden>Kembali</button>
+            <button type="button" class="btn btn--ink" data-step-next>Lanjut <Arrow /></button>
+            <button type="submit" class="btn btn--ink" data-step-submit hidden>Kirim permintaan <Arrow /></button>
+          </div>
+        </form>
+
+        <div class="sform-done" data-step-done hidden>
+          <svg class="sform-done__check" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle pathLength="1" cx="40" cy="40" r="36"></circle>
+            <path pathLength="1" d="M25 41l10 10 21-22"></path>
+          </svg>
+          <h3 class="display">Terima kasih.</h3>
+          <p data-step-summary role="status"></p>
+          <button type="button" class="btn" data-step-reset>Isi formulir lagi</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-dark faq" data-accordion>
+    <div class="wrap faq__grid">
+      <div class="faq__head">
+        <p class="label">FAQ</p>
+        <h2 class="h2 display" data-split>Pertanyaan <em>umum.</em></h2>
+      </div>
+      <div class="faq__list">
+        {
+          firm.faq.map((f) => (
+            <details>
+              <summary>
+                <span>{f.q}</span>
+                <span class="faq__icon" aria-hidden="true">
+                  <i />
+                  <i />
+                </span>
+              </summary>
+              <div class="faq__content">
+                <p>{f.a}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <NextLink href="/praktik" title="Bidang praktik" label="Kembali menjelajah" />
+</Base>

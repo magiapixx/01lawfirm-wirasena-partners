@@ -1,0 +1,48 @@
+---
+import { lawyers } from '../../data/lawyers';
+import { getPractice } from '../../data/practices';
+import { pad } from '../../lib/utils';
+import Portrait from '../Portrait.astro';
+import Arrow from '../Arrow.astro';
+
+const shown = lawyers.slice(0, 8);
+---
+
+<section class="team s-dark" id="tim" data-team>
+  <div class="wrap head-grid">
+    <p class="label">(04) Tim kami</p>
+    <div>
+      <h2 class="h2 display" data-split>Orang-orang di balik <em>setiap strategi.</em></h2>
+      <a href="/tim" class="more-link u-link">Semua {lawyers.length} advokat <Arrow /></a>
+    </div>
+  </div>
+
+  <ul class="team__list">
+    {
+      shown.map((l, i) => (
+        <li>
+          <a href={`/tim/${l.slug}`} class="trow" data-trow={i}>
+            <span class="trow__mob">
+              <Portrait name={l.name} initials={l.initials} hue={l.hue} />
+            </span>
+            <span class="trow__idx">{pad(i + 1)}</span>
+            <span class="trow__name display">{l.name}</span>
+            <span class="trow__role">{l.role}</span>
+            <span class="trow__area">{l.practices.map((s) => getPractice(s)?.title).join(', ')}</span>
+            <Arrow class="trow__arrow" />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="team__float" data-team-float aria-hidden="true">
+    {
+      shown.map((l) => (
+        <div class="team__img">
+          <Portrait name={l.name} initials={l.initials} hue={l.hue} />
+        </div>
+      ))
+    }
+  </div>
+</section>

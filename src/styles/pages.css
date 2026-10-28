@@ -1,0 +1,501 @@
+/* ==========================================================================
+   Elemen bersama halaman detail
+   ========================================================================== */
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  transition: color 0.3s;
+}
+
+.crumb:hover {
+  color: var(--fg);
+}
+
+.crumb svg {
+  width: 0.9rem;
+  transform: rotate(180deg);
+}
+
+.nextlink {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(4rem, 9vw, 8rem) var(--gutter);
+  transition: color 0.6s var(--ease-out);
+}
+
+.nextlink::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.8s var(--ease-out);
+}
+
+.nextlink:hover {
+  color: var(--paper);
+  --muted: rgb(239 235 227 / 0.6);
+}
+
+.nextlink:hover::before {
+  transform: scaleY(1);
+}
+
+.nextlink__title {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  margin-top: 1rem;
+  font-size: clamp(3rem, 10vw, 10rem);
+  transition: transform 0.8s var(--ease-out);
+}
+
+.nextlink__title svg {
+  width: 0.5em;
+  flex: none;
+}
+
+.nextlink:hover .nextlink__title {
+  transform: translateX(2vw);
+}
+
+.nextlink--sm .nextlink__title {
+  max-width: 22ch;
+  font-size: clamp(2.4rem, 5.5vw, 6rem);
+}
+
+.section-pad {
+  padding-block: clamp(5rem, 10vw, 8rem);
+}
+
+.rel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.rel__head h2 {
+  font-size: clamp(2.4rem, 5vw, 5rem);
+}
+
+.rel__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 2rem 1.5rem;
+}
+
+.lcard {
+  display: block;
+}
+
+.lcard__img {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.lcard__img svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 1.2s var(--ease-out);
+}
+
+.lcard:hover .lcard__img svg {
+  transform: scale(1.06);
+}
+
+.lcard__name {
+  margin-top: 1rem;
+  font-size: 1.9rem;
+}
+
+.lcard__role {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.alist {
+  border-top: 1px solid var(--line);
+}
+
+.alist a {
+  display: grid;
+  grid-template-columns: 10rem 1fr auto;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding 0.5s var(--ease-out);
+}
+
+.alist a:hover {
+  padding-left: 1rem;
+}
+
+.alist__title {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  line-height: 1.05;
+}
+
+.alist__meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+@media (max-width: 899px) {
+  .alist a {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
+
+/* ==========================================================================
+   Halaman bidang praktik
+   ========================================================================== */
+
+.phero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 92svh;
+  padding: calc(var(--hdr-h) + 3rem) 0 clamp(3rem, 6vw, 5rem);
+  overflow: hidden;
+}
+
+.phero__num {
+  position: absolute;
+  top: 4vh;
+  right: -2vw;
+  font-family: var(--serif);
+  font-size: 50vw;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(239 235 227 / 0.3);
+  pointer-events: none;
+  user-select: none;
+}
+
+.phero .wrap {
+  position: relative;
+  width: 100%;
+}
+
+.phero__title {
+  max-width: 13ch;
+  font-size: clamp(3.4rem, 9.5vw, 10.5rem);
+}
+
+.phero__lead {
+  max-width: 36rem;
+  margin-top: 2rem;
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  color: var(--muted);
+}
+
+.phero__glyph {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(3rem, 6vw, 5rem);
+  width: clamp(6rem, 12vw, 11rem);
+  color: var(--brass);
+}
+
+.pbody__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+}
+
+.pbody__aside {
+  grid-column: 1 / 4;
+}
+
+.pbody__sticky {
+  position: sticky;
+  top: calc(var(--hdr-h) + 1rem);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.pbody__main {
+  grid-column: 4 / 13;
+}
+
+.pbody__lead {
+  font-size: clamp(1.8rem, 3.3vw, 3.3rem);
+  line-height: 1.06;
+}
+
+.pbody__lead + .pbody__lead {
+  margin-top: 1.5rem;
+}
+
+.svc {
+  margin-top: clamp(3rem, 6vw, 5rem);
+  border-top: 1px solid var(--line);
+}
+
+.svc li {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto;
+  align-items: baseline;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 2.3vw, 2.1rem);
+  transition: padding 0.5s var(--ease-out), color 0.3s;
+}
+
+.svc li:hover {
+  padding-left: 1rem;
+  color: var(--brass);
+}
+
+.svc__n {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+@media (max-width: 899px) {
+  .pbody__aside,
+  .pbody__main {
+    grid-column: 1 / -1;
+  }
+
+  .phero__glyph {
+    top: calc(var(--hdr-h) + 2rem);
+    bottom: auto;
+    width: 5rem;
+  }
+}
+
+/* ==========================================================================
+   Halaman profil advokat
+   ========================================================================== */
+
+.lhero {
+  padding: calc(var(--hdr-h) + 3rem) 0 clamp(4rem, 8vw, 7rem);
+}
+
+.lhero__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+  align-items: end;
+}
+
+.lhero__portrait {
+  grid-column: 1 / 6;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 1.25rem;
+}
+
+.lhero__portrait svg {
+  width: 100%;
+  height: 100%;
+}
+
+.lhero__info {
+  grid-column: 7 / 13;
+}
+
+.lhero__name {
+  margin-top: 1rem;
+  font-size: clamp(3.4rem, 8vw, 9rem);
+}
+
+.lhero__facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.lhero__facts dd {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.lhero__facts dd a {
+  display: inline;
+}
+
+.lbody__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+}
+
+.lbody__bio {
+  grid-column: 1 / 8;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.lbody__bio p {
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  line-height: 1.08;
+}
+
+.lbody__side {
+  grid-column: 9 / 13;
+  display: grid;
+  gap: 2.5rem;
+  align-content: start;
+}
+
+.lbody__side ul {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.lbody__side li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (max-width: 899px) {
+  .lhero__portrait,
+  .lhero__info,
+  .lbody__bio,
+  .lbody__side {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ==========================================================================
+   Halaman artikel
+   ========================================================================== */
+
+.readbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  height: 3px;
+  background: var(--brass);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.ahero {
+  padding: calc(var(--hdr-h) + 4rem) 0 3rem;
+}
+
+.ahero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.ahero__title {
+  max-width: 17ch;
+  margin-top: 1.5rem;
+  font-size: clamp(2.8rem, 7vw, 7.5rem);
+}
+
+.ahero__author {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.ahero__avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.ahero__avatar svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ahero__author strong {
+  display: block;
+  font-weight: 500;
+}
+
+.ahero__author span {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.acover {
+  height: clamp(18rem, 62vh, 42rem);
+  margin-inline: var(--gutter);
+  overflow: hidden;
+  border-radius: 1.25rem;
+}
+
+.acover__inner {
+  height: 130%;
+  margin-top: -15%;
+}
+
+.abody {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+  padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+.abody__aside {
+  grid-column: 1 / 4;
+}
+
+.abody__text {
+  grid-column: 4 / 11;
+  font-size: clamp(1.1rem, 1.35vw, 1.3rem);
+  line-height: 1.65;
+}
+
+.abody__text p + p {
+  margin-top: 1.4em;
+}
+
+.abody__text p:first-child::first-letter {
+  float: left;
+  padding: 0.06em 0.12em 0 0;
+  font-family: var(--serif);
+  font-size: 5.2em;
+  line-height: 0.8;
+  color: var(--brass);
+}
+
+.abody__note {
+  margin-top: 3rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+@media (max-width: 899px) {
+  .abody__aside,
+  .abody__text {
+    grid-column: 1 / -1;
+  }
+}
